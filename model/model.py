@@ -50,15 +50,15 @@ class Model:
 
         for row in relazioni:
             id_escursione = row["id_escursione"]
-            id_punti_interesse = row["id_punti_interesse"]
+            id_punto_int = row["id_punto_interesse"]
 
-        if id_escursione in self.escursioni_map and id_punti_interesse in self.punti_interesse_map:
-            escursione = self.escursioni_map[id_escursione]
-            punto = self.punti_interesse_map[id_punti_interesse]
+            if id_escursione in self.escursioni_map and id_punto_int in self.punti_interesse_map:
+                escursione = self.escursioni_map[id_escursione]
+                punto = self.punti_interesse_map[id_punto_int]
 
-            # Si effettua il popolamento dei set(ORM) per entrambi gli oggetti
-            escursione.punti_interesse.add(punto)
-            punto.escursioni.add(escursione)
+                # Si effettua il popolamento dei set(ORM) per entrambi gli oggetti
+                escursione.punti_interesse.add(punto)
+                punto.escursioni.add(escursione)
 
     def genera_pacchetto(self, id_parco: str, max_giorni: int = None, max_budget: float = None):
         """
@@ -81,12 +81,12 @@ class Model:
 
         # Filtro le escursioni per prendere solo quelle del parco selezionato dall'utente
         self._escursioni_parco = [
-            escursione for escursione in self.escursioni_map.values()
-            if escursione.id_parco == id_parco]
+            esc for esc in self.escursioni_map.values()
+            if esc.id_parco == id_parco]
 
         # La lista vien ricreata da zero ogni volta che l'utente preme " Genera Pacchetto
 
-        self._ricorsione(0, [], 0, 0, 0, 0, set())
+        self._ricorsione(0, [], 0, 0.0, 0,  set())
 
         if self._valore_ottimo == -1:
             self._valore_ottimo = 0
