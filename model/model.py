@@ -76,6 +76,20 @@ class Model:
         self._valore_ottimo = -1
 
         # TODO
+        self._max_giorni = max_giorni
+        self._max_budget = max_budget
+
+        # Filtro le escursioni per prendere solo quelle del parco selezionato dall'utente
+        self._escursioni_parco = [
+            escursione for escursione in self.escursioni_map.values()
+            if escursione.id_parco == id_parco]
+
+        # La lista vien ricreata da zero ogni volta che l'utente preme " Genera Pacchetto
+
+        self._ricorsione(0, [], 0, 0, 0, 0, set())
+
+        if self._valore_ottimo == -1:
+            self._valore_ottimo = 0
 
         return self._pacchetto_ottimo, self._costo, self._valore_ottimo
 
