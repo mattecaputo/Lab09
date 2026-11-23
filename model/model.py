@@ -1,6 +1,8 @@
 from database.parco_DAO import ParcoDAO
 from database.escursione_DAO import EscursioneDAO
 from database.punto_interesse_DAO import PuntoInteresseDAO
+from model import escursione
+
 
 class Model:
     def __init__(self):
@@ -12,6 +14,9 @@ class Model:
         self._costo = 0
 
         # TODO: Aggiungere eventuali altri attributi
+        self._escursioni_parco = []
+        self._max_giorni = None
+        self._max_budget = None
 
         # Caricamento
         self.load_escursioni()
@@ -63,3 +68,4 @@ class Model:
         """ Algoritmo di ricorsione che deve trovare il pacchetto che massimizza il voto complessivo dei visitatori"""
 
         # TODO: è possibile cambiare i parametri formali della funzione se ritenuto opportuno
+
