@@ -97,4 +97,35 @@ class Model:
         """ Algoritmo di ricorsione che deve trovare il pacchetto che massimizza il voto complessivo dei visitatori"""
 
         # TODO: è possibile cambiare i parametri formali della funzione se ritenuto opportuno
+        if valore_corrente > self._valore_ottimo:
+            self._valore_ottimo = valore_corrente
+            self._pacchetto_ottimo = pacchetto_parziale.copy()
+            self._costo = costo_corrente
 
+            # Ciò garantisce che il vincolo venga rispettato
+        for i in range(start_index, len(self._escursioni_parco)):
+            escursione = self._escursioni_parco[i]
+            # secondo vincolo: punti d'interesse non duplicati
+            if punti_usati.intersection(escursione.punti_interesse):
+                continue
+            # Terzo vincolo: il periodo massimo di giorni
+            if self._max_giorni is not None and (durata_corrente + escursione.durata_giorni > self._max_giorni):
+                continue
+
+            # Quarto vincolo: budget massimo
+            if self._max_budget is not None and (costo_corrente + escursione.costo > self._max_budget):
+                continue
+
+            # continue fa saltare tutto il resto del codice dentro questo giro del ciclo e passa immediatamente all'elemento successivo
+
+            votazione = sum(p.voto_visitatori for p in escursione.punti_interesse)
+            pacchetto_parziale.append(escursione)
+            punti_usati.update(escursione.punti_interesse)
+
+            self._ricorsione(i + 1, pacchetto_parziale, durata_corrente + escursione.durata_giorni,
+                             costo_corrente + escursione.costo,
+                             valore_corrente + votazione, punti_usati)
+
+            # backtracking
+            pacchetto_parziale.pop()
+            punti_usati.difference_update(escursione.punti_interesse)
