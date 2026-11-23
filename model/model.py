@@ -44,6 +44,21 @@ class Model:
             --> Ogni PuntoInteresse ha un set di Escursioni.
         """
         # TODO
+        relazioni = EscursioneDAO.get_escursioni_punti_interesse()
+        if relazioni is None:
+            return
+
+        for row in relazioni:
+            id_escursione = row["id_escursione"]
+            id_punti_interesse = row["id_punti_interesse"]
+
+        if id_escursione in self.escursioni_map and id_punti_interesse in self.punti_interesse_map:
+            escursione = self.escursioni_map[id_escursione]
+            punto = self.punti_interesse_map[id_punti_interesse]
+
+            # Si effettua il popolamento dei set(ORM) per entrambi gli oggetti
+            escursione.punti_interesse.add(punto)
+            punto.escursioni.add(escursione)
 
     def genera_pacchetto(self, id_parco: str, max_giorni: int = None, max_budget: float = None):
         """
